@@ -7,6 +7,6 @@ export const Contacts = styled.ul`
   margin-bottom: 10px;
 
   padding: 0;
-  width: 395px;
+  width: 450px;
   text-align: center;
 `;

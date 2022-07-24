@@ -1,7 +1,12 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
+import Notiflix from 'notiflix';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Label, ErrorText } from './ContactForm.styled';
-import { useContacts } from 'hooks/useContacts';
+import { useSelector, useDispatch } from 'react-redux';
+import { getContacts } from 'redux/contacts/contactsSelectors'
+import { postContact } from 'redux/contacts/contactsOperations'
+import { nanoid } from 'nanoid';
+
 
 
 const schema = yup.object().shape({
@@ -31,7 +36,25 @@ const initialValues = {
 };
 
 const ContactForm = () => {
-  const { addContact } = useContacts();
+
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const setContact = contact => dispatch(postContact(contact));
+  const addContact = ( name, number ) => {
+    const contact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    const currentName = name.toLowerCase();
+    const matchName = contacts.some(
+      ({ name }) => name.toLowerCase() === currentName
+    );
+
+    matchName ? Notiflix.Notify.failure(`${name} is already in contacts`) : setContact(contact);
+  };
+  
   const handleSubmit = (values, { resetForm }) => {
     const { name, number } = values;
     addContact(name, number);

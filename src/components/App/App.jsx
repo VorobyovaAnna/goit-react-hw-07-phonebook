@@ -1,10 +1,18 @@
 import { AppContainer } from './App.styled';
 import { GlobalStyle } from '../GlobalStyle';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchContacts } from '../../redux/contacts/contactsOperations';
 import ContactForm from '../ContactForm';
 import ContactList from '../ContactList';
 import Filter from '../Filter';
 
-const App = () => {
+export default function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <AppContainer>
@@ -17,5 +25,3 @@ const App = () => {
     </AppContainer>
   );
 };
-
-export default App;
